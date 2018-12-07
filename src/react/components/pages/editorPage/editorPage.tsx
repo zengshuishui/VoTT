@@ -9,6 +9,7 @@ import HtmlFileReader from "../../../../common/htmlFileReader";
 import "./editorPage.scss";
 import AssetPreview from "./assetPreview";
 import EditorFooter from "./editorFooter";
+import Canvas from "./canvas";
 
 interface IEditorPageProps extends RouteComponentProps, React.Props<IEditorPageProps> {
     project: IProject;
@@ -116,8 +117,9 @@ export default class EditorPage extends React.Component<IEditorPageProps, IEdito
                     </div>
                     <div>
                         <EditorFooter
-                            tags={this.props.project.tags}
+                            tags={this.props.project.tags}                        
                             onTagsChanged={this.onFooterChange} />
+                        <Canvas asset={selectedAsset}></Canvas>
                     </div>
                 </div>
             </div>
