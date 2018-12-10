@@ -10,7 +10,6 @@ import "./editorPage.scss";
 import AssetPreview from "./assetPreview";
 import EditorFooter from "./editorFooter";
 import Canvas from "./canvas";
-import CanvasContainer from "./canvasContainer";
 
 interface IEditorPageProps extends RouteComponentProps, React.Props<IEditorPageProps> {
     project: IProject;
