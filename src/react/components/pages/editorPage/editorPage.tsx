@@ -10,6 +10,7 @@ import "./editorPage.scss";
 import AssetPreview from "./assetPreview";
 import EditorFooter from "./editorFooter";
 import Canvas from "./canvas";
+import CanvasContainer from "./canvasContainer";
 
 interface IEditorPageProps extends RouteComponentProps, React.Props<IEditorPageProps> {
     project: IProject;
@@ -105,13 +106,14 @@ export default class EditorPage extends React.Component<IEditorPageProps, IEdito
                     <div className="editor-page-content-body">
                         {selectedAsset &&
                             <div className="canvas-container">
-                                <AssetPreview asset={selectedAsset.asset} />
+                                {/* <AssetPreview asset={selectedAsset} />
                                 {selectedAsset.asset.size &&
                                     <div>
                                         Width: {selectedAsset.asset.size.width}
                                         Height: {selectedAsset.asset.size.height}
                                     </div>
-                                }
+                                } */}
+                                <Canvas selectedAsset={this.state.selectedAsset}/>
                             </div>
                         }
                     </div>
@@ -119,7 +121,6 @@ export default class EditorPage extends React.Component<IEditorPageProps, IEdito
                         <EditorFooter
                             tags={this.props.project.tags}                        
                             onTagsChanged={this.onFooterChange} />
-                        <Canvas asset={selectedAsset}></Canvas>
                     </div>
                 </div>
             </div>
