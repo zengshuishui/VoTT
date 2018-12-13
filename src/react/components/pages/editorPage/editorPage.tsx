@@ -2,7 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import _ from "lodash";
-import { IApplicationState, IProject, IAsset, IAssetMetadata, AssetState } from "../../../../models/applicationState";
+import { IApplicationState, IProject, IAsset, IAssetMetadata, AssetState, IRegion } from "../../../../models/applicationState";
 import IProjectActions, * as projectActions from "../../../../redux/actions/projectActions";
 import { RouteComponentProps } from "react-router-dom";
 import HtmlFileReader from "../../../../common/htmlFileReader";
@@ -54,6 +54,11 @@ export default class EditorPage extends React.Component<IEditorPageProps, IEdito
 
         this.selectAsset = this.selectAsset.bind(this);
         this.onFooterChange = this.onFooterChange.bind(this);
+        let addRegion = this.addRegion.bind(this);
+    }
+
+    private addRegion(region: IRegion){
+        
     }
 
     public async componentDidMount() {
@@ -71,6 +76,7 @@ export default class EditorPage extends React.Component<IEditorPageProps, IEdito
     public render() {
         const { project } = this.props;
         const { assets, selectedAsset } = this.state;
+        const addRegion  =   this.addRegion;
 
         if (!project) {
             return (<div>Loading...</div>);
@@ -99,7 +105,9 @@ export default class EditorPage extends React.Component<IEditorPageProps, IEdito
                                         Height: {selectedAsset.asset.size.height}
                                     </div>
                                 } */}
-                                <Canvas selectedAsset={this.state.selectedAsset}/>
+                                <Canvas 
+                                    selectedAsset={this.state.selectedAsset}
+                                    addRegion={this.addRegion}/>
                             </div>
                         }
                     </div>
