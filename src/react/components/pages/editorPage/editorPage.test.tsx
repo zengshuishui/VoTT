@@ -10,7 +10,8 @@ import { IApplicationState,
          IAsset,
          ITag,
          IConnection,
-         IExportFormat } from "../../../../models/applicationState";
+         IExportFormat, 
+         AssetState} from "../../../../models/applicationState";
 import IProjectActions from "../../../../redux/actions/projectActions";
 import AssetPreview from "./assetPreview";
 
@@ -22,6 +23,7 @@ describe("Editor Page Component", () => {
     let format: IExportFormat;
     let testProject: IProject = null;
     let assets: IAsset[];
+    let assetState: AssetState;
     let state: any;
     let projectActions: IProjectActions;
     let testAsset: IAsset;
@@ -40,8 +42,6 @@ describe("Editor Page Component", () => {
             providerOptions: {},
         };
         format = {
-            id: "1",
-            name: "export format",
             providerType: "provider",
             providerOptions: {},
         };
@@ -56,7 +56,7 @@ describe("Editor Page Component", () => {
             targetConnection: connection,
             exportFormat: format,
             autoSave: true,
-            assets: { id: "1", IAsset: {} },
+            assets: { testAsset },
         };
         projectActions = {
             loadProjects: () => new Promise<IProject[]>(executor),
@@ -70,13 +70,14 @@ describe("Editor Page Component", () => {
         testAsset = {
             id: "1",
             type: 0,
+            state: 0,
             name: "asset",
             path: "path",
             size: {
                 width: 1,
                 height: 1.
             },
-        }
+        };
         assets = [testAsset];
         state = {
             testProject,
