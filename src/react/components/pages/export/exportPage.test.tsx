@@ -31,8 +31,8 @@ describe("Export Page", () => {
     });
 
     it("Sets project state from redux store", () => {
-        const testProject = MockFactory.createTestProject();
-        const store = createStore(testProject);
+        const testProject = MockFactory.createTestProject("TestProject");
+        const store = createStore(testProject, true);
         const props = createProps(testProject.id);
         const loadProjectSpy = jest.spyOn(props.actions, "loadProject");
 
@@ -40,30 +40,28 @@ describe("Export Page", () => {
         const exportPage = wrapper.find(ExportPage).childAt(0);
 
         expect(loadProjectSpy).not.toBeCalled();
-        expect(exportPage.state()["project"]).toEqual(testProject);
+        expect(exportPage.prop("project")).toEqual(testProject);
     });
 
     it("Sets project state from route params", (done) => {
-        const testProject = MockFactory.createTestProject();
-        const store = createStore();
+        const testProject = MockFactory.createTestProject("TestProject");
+        const store = createStore(testProject, false);
         const props = createProps(testProject.id);
-
         const loadProjectSpy = jest.spyOn(props.actions, "loadProject");
-        projectServiceMock.prototype.get = jest.fn(() => Promise.resolve(testProject));
 
         const wrapper = createCompoent(store, props);
         const exportPage = wrapper.find(ExportPage).childAt(0);
 
         setImmediate(() => {
-            expect(loadProjectSpy).toHaveBeenCalledWith(testProject.id);
-            expect(exportPage.state()["project"]).toEqual(testProject);
+            expect(loadProjectSpy).toHaveBeenCalledWith(testProject);
+            expect(exportPage.prop("project")).toEqual(testProject);
             done();
         });
     });
 
     it("Calls save and export project actions on form submit", (done) => {
-        const testProject = MockFactory.createTestProject();
-        const store = createStore(testProject);
+        const testProject = MockFactory.createTestProject("TestProject");
+        const store = createStore(testProject, true);
         const props = createProps(testProject.id);
 
         const saveProjectSpy = jest.spyOn(props.actions, "saveProject");
@@ -79,14 +77,15 @@ describe("Export Page", () => {
 
         const wrapper = createCompoent(store, props);
         wrapper.find("form").simulate("submit");
+        wrapper.update();
 
         setImmediate(() => {
             expect(saveProjectSpy).toBeCalled();
             expect(exportProjectSpy).toBeCalled();
             expect(props.history.goBack).toBeCalled();
 
-            const updatedProject = wrapper.find(ExportPage).childAt(0).state()["project"] as IProject;
-            expect(updatedProject.exportFormat).not.toBeNull();
+            const state = store.getState() as IApplicationState;
+            expect(state.currentProject.exportFormat).not.toBeNull();
             done();
         });
     });
@@ -95,6 +94,7 @@ describe("Export Page", () => {
 function createProps(projectId: string): IExportPageProps {
     return {
         project: null,
+        recentProjects: [],
         history: {
             length: 0,
             action: null,
@@ -126,15 +126,15 @@ function createProps(projectId: string): IExportPageProps {
     };
 }
 
-function createStore(project?: IProject): Store<any, AnyAction> {
+function createStore(project: IProject, setCurrentProject: boolean = false): Store<any, AnyAction> {
     const initialState: IApplicationState = {
-        currentProject: project,
+        currentProject: setCurrentProject ? project : null,
         appSettings: {
             connection: null,
             devToolsEnabled: false,
         },
         connections: [],
-        recentProjects: project ? [project] : [],
+        recentProjects: [project],
     };
 
     return createReduxStore(initialState);
