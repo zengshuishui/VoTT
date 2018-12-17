@@ -61,7 +61,9 @@ export default class EditorPage extends React.Component<IEditorPageProps, IEdito
     }
 
     private async addRegion(region: IRegion){
-
+        const assetMetadata = await this.props.projectActions.loadAssetMetadata(this.props.project, this.state.selectedAsset.asset);
+        //@ts-ignore
+        assetMetadata.regions.push(region);
     }
 
     public async componentDidMount() {
