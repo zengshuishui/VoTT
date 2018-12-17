@@ -7,13 +7,12 @@ const formSchema = require("./connectionForm.json");
 // tslint:disable-next-line:no-var-requires
 const uiSchema = require("./connectionForm.ui.json");
 
-interface IConnectionFormProps extends React.Props<ConnectionForm> {
+export interface IConnectionFormProps extends React.Props<ConnectionForm> {
     connection: IConnection;
     onSubmit: (connection: IConnection) => void;
 }
 
 interface IConnectionFormState {
-    providerName: string;
     formSchema: any;
     uiSchema: any;
     formData: IConnection;
@@ -30,7 +29,6 @@ export default class ConnectionForm extends React.Component<IConnectionFormProps
         this.state = {
             formSchema: { ...formSchema },
             uiSchema: { ...uiSchema },
-            providerName: this.props.connection ? this.props.connection.providerType : null,
             formData: this.props.connection,
         };
 
@@ -67,10 +65,16 @@ export default class ConnectionForm extends React.Component<IConnectionFormProps
     }
 
     private onFormChange = (args) => {
-        const providerType = args.formData.providerType;
+        const formData = this.state.formData;
 
-        if (providerType !== this.state.providerName) {
+        if (!formData || args.formData.providerType !== formData.providerType) {
             this.bindForm(args.formData, true);
+        } else {
+            this.setState({
+                formSchema: args.schema,
+                uiSchema: args.uiSchema,
+                formData: args.formData,
+            });
         }
     }
 
@@ -96,7 +100,6 @@ export default class ConnectionForm extends React.Component<IConnectionFormProps
         }
 
         this.setState({
-            providerName: providerType,
             formSchema: newFormSchema,
             uiSchema: newUiSchema,
             formData,
