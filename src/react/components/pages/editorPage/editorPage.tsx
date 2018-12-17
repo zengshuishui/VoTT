@@ -57,13 +57,6 @@ export default class EditorPage extends React.Component<IEditorPageProps, IEdito
 
         this.selectAsset = this.selectAsset.bind(this);
         this.onFooterChange = this.onFooterChange.bind(this);
-        this.onAssetMetadataChanged = this.addRegion.bind(this);
-    }
-
-    private async addRegion(region: IRegion){
-        const assetMetadata = await this.props.projectActions.loadAssetMetadata(this.props.project, this.state.selectedAsset.asset);
-        //@ts-ignore
-        assetMetadata.regions.push(region);
     }
 
     public async componentDidMount() {
@@ -81,7 +74,6 @@ export default class EditorPage extends React.Component<IEditorPageProps, IEdito
     public render() {
         const { project } = this.props;
         const { assets, selectedAsset } = this.state;
-        const addRegion  =   this.addRegion;
 
         if (!project) {
             return (<div>Loading...</div>);
@@ -111,8 +103,8 @@ export default class EditorPage extends React.Component<IEditorPageProps, IEdito
                                     </div>
                                 } */}
                                 <Canvas 
-                                    selectedAsset={this.state.selectedAsset}/>
-                                    {/* onAssetMetadataChanegd={this.onAssetMetadataChanged.bind(this)}/> */}
+                                    selectedAsset={this.state.selectedAsset}
+                                    onAssetMetadataChanged={this.onAssetMetadataChanged.bind(this)}/>
                             </div>
                         }
                     </div>
@@ -126,8 +118,9 @@ export default class EditorPage extends React.Component<IEditorPageProps, IEdito
         );
     }
 
-    private onAssetMetadataChanged(){
-
+    private async onAssetMetadataChanged(assetMetadata: IAssetMetadata){
+        await this.props.projectActions.saveAssetMetadata(this.props.project, assetMetadata);
+        await this.props.projectActions.saveProject(this.props.project);
     }
 
     private onFooterChange(footerState) {
@@ -154,8 +147,9 @@ export default class EditorPage extends React.Component<IEditorPageProps, IEdito
             console.error(err);
         }
 
-        await this.props.projectActions.saveAssetMetadata(this.props.project, assetMetadata);
-        await this.props.projectActions.saveProject(this.props.project);
+        this.onAssetMetadataChanged(assetMetadata);
+        // await this.props.projectActions.saveAssetMetadata(this.props.project, assetMetadata);
+        // await this.props.projectActions.saveProject(this.props.project);
 
         this.setState({
             selectedAsset: assetMetadata,
