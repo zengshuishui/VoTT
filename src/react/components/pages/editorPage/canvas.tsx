@@ -16,6 +16,24 @@ interface ICanvasState {
 
 export default class Canvas extends React.Component<ICanvasProps, ICanvasState> {
     private editor: Editor;
+
+    //Region Manager Methods
+    public addPointRegion;
+    public addPolylineRegion;
+    public addRectRegion;
+    public deleteAllRegions;
+    public deleteRegionById;
+    public drawRegion;
+    public freeze;
+    public getSelectedRegionsBounds;
+    public redrawAllRegions;
+    public resize;
+    public selectRegionById;
+    public toggleFreezeMode;
+    public unfreeze;
+    public updateTagsById;
+    public updateTagsForSelectedRegions;
+
     constructor(props, context) {
         super(props, context);
 
@@ -32,6 +50,23 @@ export default class Canvas extends React.Component<ICanvasProps, ICanvasState> 
         // @ts-ignore
         this.editor = new ct.Editor(sz);
         this.editor.addToolbar(tz, ct.Editor.FullToolbarSet, "../../../images/icons/");
+
+        //Expose CanvasTools RegionMaager API
+        this.addPointRegion = this.editor.RM.addPointRegion.bind(this.editor.RM);
+        this.addPolylineRegion = this.editor.RM.addPolylineRegion.bind(this.editor.RM);
+        this.addRectRegion = this.editor.RM.addRectRegion.bind(this.editor.RM);
+        this.deleteAllRegions = this.editor.RM.deleteAllRegions.bind(this.editor.RM);
+        this.deleteRegionById = this.editor.RM.deleteRegionById.bind(this.editor.RM);
+        this.drawRegion = this.editor.RM.drawRegion.bind(this.editor.RM);
+        this.freeze = this.editor.RM.freeze.bind(this.editor.RM);
+        this.getSelectedRegionsBounds = this.editor.RM.getSelectedRegionsBounds.bind(this.editor.RM);
+        this.redrawAllRegions = this.editor.RM.redrawAllRegions.bind(this.editor.RM);
+        this.resize = this.editor.RM.resize.bind(this.editor.RM);
+        this.selectRegionById = this.editor.RM.selectRegionById.bind(this.editor.RM);
+        this.toggleFreezeMode = this.editor.RM.toggleFreezeMode.bind(this.editor.RM);
+        this.unfreeze = this.editor.RM.unfreeze.bind(this.editor.RM);
+        this.updateTagsById = this.editor.RM.updateTagsById.bind(this.editor.RM);
+        this.updateTagsForSelectedRegions = this.editor.RM.updateTagsForSelectedRegions.bind(this.editor.RM);
 
         let incrementalRegionID = 100;
 
@@ -142,22 +177,4 @@ export default class Canvas extends React.Component<ICanvasProps, ICanvasState> 
             });
         }
     }
-
-    //Region Manager Methods
-    public addPointRegion = this.editor.RM.addPointRegion;
-    public addPolylineRegion = this.editor.RM.addPolylineRegion;
-    public addRectRegion = this.editor.RM.addRectRegion;
-    public deleteAllRegions = this.editor.RM.deleteAllRegions;
-    public deleteRegionById = this.editor.RM.deleteRegionById;
-    public drawRegion = this.editor.RM.drawRegion;
-    public freeze = this.editor.RM.freeze;
-    public getSelectedRegionsBounds = this.editor.RM.getSelectedRegionsBounds;
-    public redrawAllRegions = this.editor.RM.redrawAllRegions;
-    public resize = this.editor.RM.resize;
-    public selectRegionById = this.editor.RM.selectRegionById;
-    public toggleFreezeMode = this.editor.RM.toggleFreezeMode;
-    public unfreeze = this.editor.RM.unfreeze;
-    public updateTagsById = this.editor.RM.updateTagsById;
-    public updateTagsForSelectedRegions = this.editor.RM.updateTagsForSelectedRegions;
-
 }
