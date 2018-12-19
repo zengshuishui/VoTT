@@ -67,7 +67,7 @@ export default class ConnectionForm extends React.Component<IConnectionFormProps
     private onFormChange = (args) => {
         const formData = this.state.formData;
 
-        if (!formData || args.formData.providerType !== formData.providerType) {
+        if (!formData || formData.providerType !== args.formData.providerType) {
             this.bindForm(args.formData, true);
         } else {
             this.setState({
