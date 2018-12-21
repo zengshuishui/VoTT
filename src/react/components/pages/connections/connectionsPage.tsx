@@ -107,7 +107,9 @@ export default class ConnectionPage extends React.Component<IConnectionPageProps
     }
 
     private onFormSubmit = async (connection: IConnection) => {
-        connection.id = shortid.generate();
+        if (!connection.id) {
+            connection.id = shortid.generate();
+        }
         await this.props.actions.saveConnection(connection);
         this.props.history.push("/connections");
     }
